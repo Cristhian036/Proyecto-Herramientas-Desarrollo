@@ -35,6 +35,7 @@ public class AuthenticationController {
             autenticar(jwtRequest.getUsername(),jwtRequest.getPassword());
         }catch (Exception exception){
             exception.printStackTrace();
+            throw new Exception("Usuario no encontrado");
         }
 
         UserDetails userDetails =  this.userDetailsService.loadUserByUsername(jwtRequest.getUsername());
@@ -50,5 +51,10 @@ public class AuthenticationController {
         }catch (BadCredentialsException e){
             throw  new Exception("Credenciales invalidas " + e.getMessage());
         }
+    }
+
+    @GetMapping("/actual-usuario")
+    public Usuario obtenerUsuarioActual(Principal principal){
+        return (Usuario) this.userDetailsService.loadUserByUsername(principal.getName());
     }
 }
